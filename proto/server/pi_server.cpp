@@ -34,10 +34,13 @@
 #include "google/rpc/code.pb.h"
 #include "log.h"
 #include "p4/v1/p4runtime.grpc.pb.h"
+#include "p4/v1/helloworld.grpc.pb.h"// edit by txg
 #include "pi_server_testing.h"
 #include "uint128.h"
 
 #include "PI/proto/pi_server.h"
+//#include "PI/target/pi_imp.h"
+#include "PI/target/pi_imp.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -46,6 +49,11 @@ using grpc::ServerWriter;
 using grpc::ServerReaderWriter;
 using grpc::Status;
 using grpc::StatusCode;
+//edit by txg
+using helloworld::HelloRequest;
+using helloworld::HelloReply;
+using helloworld::Greeter;
+
 
 using pi::fe::proto::DeviceMgr;
 
@@ -314,6 +322,12 @@ class DeviceState {
   DeviceMgr::device_id_t device_id;
 };
 
+// edit by txg
+void test_read_one(){
+  _test_read_one();
+}
+
+
 class Devices {
  public:
   static DeviceState *get(DeviceMgr::device_id_t device_id) {
@@ -347,6 +361,21 @@ class Devices {
 
 void packet_in_cb(DeviceMgr::device_id_t device_id, p4v1::PacketIn *packet,
                   void *cookie);
+
+// edit by txg
+class HelloworldServiceImpl : public helloworld::Greeter::Service {
+public:
+  Status SayHello(ServerContext* context, const HelloRequest* request,
+                HelloReply* reply)  {
+  std::string prefix("Hello ");
+  std::string suffix(" wo shi tiandaye\n");
+  test_read_one();
+  //_test_read_one();
+  reply->set_message(prefix + request->name() + suffix);
+  return Status::OK;
+  }
+
+};
 
 class P4RuntimeServiceImpl : public p4v1::P4Runtime::Service {
  private:
@@ -496,6 +525,14 @@ class P4RuntimeServiceImpl : public p4v1::P4Runtime::Service {
   static Uint128 convert_u128(const p4v1::Uint128 &from) {
     return Uint128(from.high(), from.low());
   }
+
+// edit by txg
+  Status SayHello(ServerContext* context, const HelloRequest* request,
+                  HelloReply* reply)  {
+    std::string prefix("Hello ");
+    reply->set_message(prefix + request->name());
+    return Status::OK;
+  }
 };
 
 void packet_in_cb(DeviceMgr::device_id_t device_id, p4v1::PacketIn *packet,
@@ -509,6 +546,7 @@ struct ServerData {
   std::string server_address;
   int server_port;
   P4RuntimeServiceImpl pi_service;
+  HelloworldServiceImpl hello_service;//edit by txg
   std::unique_ptr<gnmi::gNMI::Service> gnmi_service;
   ServerBuilder builder;
   std::unique_ptr<Server> server;
@@ -546,6 +584,7 @@ void PIGrpcServerRunAddr(const char *server_address) {
     server_data->server_address, grpc::InsecureServerCredentials(),
     &server_data->server_port);
   builder.RegisterService(&server_data->pi_service);
+  builder.RegisterService(&server_data->hello_service);
 #ifdef WITH_SYSREPO
   server_data->gnmi_service = ::pi::server::make_gnmi_service_sysrepo();
 #else

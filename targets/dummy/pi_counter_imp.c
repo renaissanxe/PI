@@ -35,6 +35,7 @@ pi_status_t _pi_counter_read(pi_session_handle_t session_handle,
   (void)flags;
   (void)counter_data;
   func_counter_increment(__func__);
+  printf("read successfully_bytxg\n");
   return PI_STATUS_SUCCESS;
 }
 

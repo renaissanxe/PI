@@ -231,6 +231,7 @@ SimpleRouterMgr::SimpleRouterMgr(int dev_id,
                                  std::shared_ptr<Channel> channel)
     : dev_id(dev_id), io_service(io_service),
       pi_stub_(p4v1::P4Runtime::NewStub(channel)),
+      stub_(helloworld::Greeter::NewStub(channel)),
       packet_io_client(new StreamChannelSyncClient(this, channel)) {
 }
 
@@ -742,4 +743,46 @@ SimpleRouterMgr::update_config_(const std::string &config_buffer,
   }
 
   return 0;
+}
+
+// edit by txg
+int
+SimpleRouterMgr::test_func_txg(){
+  GreeterClient greeter(grpc::CreateChannel(
+      "localhost:50051", grpc::InsecureChannelCredentials()));
+  std::string user("world");
+  std::string reply = greeter.SayHello(user);
+  std::cout << "Greeter received: " << reply << std::endl;
+
+  return 0;
+
+}
+
+
+
+int 
+SimpleRouterMgr::test_func_txg1(){
+  std::string user("world");
+  HelloRequest request;
+  request.set_name(user);
+
+  HelloReply reply;
+  ClientContext context;
+
+  //std::shared_ptr<Channel> channel;
+  //auto stub_(Greeter::NewStub(channel));
+
+  Status status = stub_->SayHello(&context, request, &reply);
+
+    // Act upon its status.
+    if (status.ok()) {
+      //printf("%s\n", reply.message());
+      std::cout << reply.message() << std::endl;
+      return 0;
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return 0;
+    }
+
 }

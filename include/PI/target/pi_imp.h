@@ -57,8 +57,11 @@ pi_status_t _pi_packetout_send(pi_dev_id_t dev_id, const char *pkt,
 pi_status_t pi_packetin_receive(pi_dev_id_t dev_id, const char *pkt,
                                 size_t size);
 
+// edit by txg
+pi_status_t _test_read_one();
+
 #ifdef __cplusplus
 }
 #endif
-
+pi_status_t _test_read_one();
 #endif  // PI_INC_PI_TARGET_PI_IMP_H_

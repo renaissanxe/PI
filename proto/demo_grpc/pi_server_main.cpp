@@ -26,6 +26,8 @@
 
 #include <csignal>
 
+#include "PI/target/pi_imp.h" // edit by txg
+
 using pi::fe::proto::DeviceMgr;
 
 int main(int argc, char** argv) {
@@ -40,6 +42,9 @@ int main(int argc, char** argv) {
   }
 
   DeviceMgr::init(256);
+  //_test_read_one();//edit by txg
+
+
 
   auto handler = [](int s) {
     std::cout << "Server shutting down\n";

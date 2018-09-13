@@ -6,7 +6,8 @@ AM_CPPFLAGS = \
 -I$(top_srcdir)/server \
 -I$(top_builddir)/cpp_out \
 -I$(top_builddir)/grpc_out \
--I$(top_srcdir)/p4info
+-I$(top_srcdir)/p4info \
+-I$(top_builddir)/../include 
 
 AM_CXXFLAGS = -Wall -Werror -Wno-unused-command-line-argument
 

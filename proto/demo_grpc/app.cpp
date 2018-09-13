@@ -33,12 +33,19 @@
 #include <streambuf>
 #include <thread>
 
+
+#include "PI/target/pi_imp.h" // edit by txg
+
 #define PORT 8888
+
+
 
 namespace {
 
 char *opt_config_path = NULL;
 char *opt_p4info_path = NULL;
+
+
 
 void print_help(const char *name) {
   fprintf(stderr,
@@ -132,11 +139,14 @@ int main(int argc, char *argv[]) {
   simple_router_mgr.set_default_entries();
   simple_router_mgr.static_config();
 
+  simple_router_mgr.test_func_txg1();// edit by txg
+
   // TODO(antonin): manage web server requests in same boost asio event loop?
   WebServer web_server(&simple_router_mgr);
   web_server.set_json_name(std::string(opt_config_path));
   web_server.start();
 
   io_service.run();
+
   assert(0);
 }

@@ -54,6 +54,10 @@ void PIGrpcServerForceShutdown(int deadline_seconds);
 // Once server has been shutdown, cleanup allocated resources.
 void PIGrpcServerCleanup();
 
+
+// edit by txg
+void test_read_one();
+
 #ifdef __cplusplus
 }
 #endif

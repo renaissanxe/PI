@@ -36,6 +36,7 @@ pi_status_t _pi_init(void *extra) {
     counter_dump_path = strdup("func_counter.txt");
   func_counter_init();
   func_counter_increment(__func__);
+  printf("woshinitiandaye");
   return PI_STATUS_SUCCESS;
 }
 
@@ -114,5 +115,15 @@ pi_status_t _pi_packetout_send(pi_dev_id_t dev_id, const char *pkt,
   (void)pkt;
   (void)size;
   func_counter_increment(__func__);
+  return PI_STATUS_SUCCESS;
+}
+
+// edit by txg
+ pi_status_t _test_read_one(){
+
+  printf("SUccessfully arrive here, txg\n");
+
+  //char* value = "I am your tiandaye";
+
   return PI_STATUS_SUCCESS;
 }

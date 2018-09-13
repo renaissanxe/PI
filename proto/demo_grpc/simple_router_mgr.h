@@ -27,6 +27,7 @@
 #include <grpc++/grpc++.h>
 
 #include "p4/v1/p4runtime.grpc.pb.h"
+#include "p4/v1/helloworld.grpc.pb.h"
 
 #include <iostream>
 #include <cstring>
@@ -37,6 +38,13 @@
 #include <thread>
 
 using grpc::Channel;
+// edit by txg
+using grpc::ClientContext;
+using grpc::Status;
+using helloworld::HelloRequest;
+using helloworld::HelloReply;
+using helloworld::Greeter;
+
 
 struct __attribute__((packed)) cpu_header_t {
   char zeros[8];
@@ -99,6 +107,8 @@ class SimpleRouterMgr {
 
   int update_config(const std::string &config_buffer,
                     const std::string *p4info_buffer);
+  int test_func_txg(); // edit by txg
+  int test_func_txg1();// edit by txg
 
   template <typename E> void post_event(E &&event) {
     io_service.post(std::move(event));
@@ -164,5 +174,44 @@ class SimpleRouterMgr {
   pi_p4info_t *p4info{nullptr};
   boost::asio::io_service &io_service;
   std::unique_ptr<p4::v1::P4Runtime::Stub> pi_stub_;
+  std::unique_ptr<helloworld::Greeter::Stub> stub_;//edit by txg
   std::unique_ptr<StreamChannelSyncClient> packet_io_client;
+};
+
+// edit by txg
+class GreeterClient {
+ public:
+  GreeterClient(std::shared_ptr<Channel> channel)
+      : stub_(Greeter::NewStub(channel)) {}
+
+  // Assembles the client's payload, sends it and presents the response back
+  // from the server.
+  std::string SayHello(const std::string& user) {
+    // Data we are sending to the server.
+    HelloRequest request;
+    request.set_name(user);
+
+    // Container for the data we expect from the server.
+    HelloReply reply;
+
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    // The actual RPC.
+    Status status = stub_->SayHello(&context, request, &reply);
+    std::cout << reply.message() << std::endl; 
+
+    // Act upon its status.
+    if (status.ok()) {
+      return reply.message();
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return "RPC failed";
+    }
+  }
+
+ private:
+  std::unique_ptr<Greeter::Stub> stub_;
 };

@@ -20,6 +20,8 @@ PROTOFLAGS = -I$(abs_srcdir) -I$(abs_builddir)
 protos = \
 $(abs_srcdir)/p4/v1/p4data.proto \
 $(abs_srcdir)/p4/v1/p4runtime.proto \
+$(abs_srcdir)/p4/v1/extra.proto \
+$(abs_srcdir)/p4/v1/helloworld.proto \
 $(abs_srcdir)/p4/config/v1/p4info.proto \
 $(abs_srcdir)/p4/config/v1/p4types.proto \
 $(abs_srcdir)/google/rpc/status.proto \
@@ -32,6 +34,8 @@ $(abs_srcdir)/gnmi/gnmi.proto
 EXTRA_DIST = \
 p4/v1/p4data.proto \
 p4/v1/p4runtime.proto \
+$(abs_srcdir)/p4/v1/extra.proto \
+$(abs_srcdir)/p4/v1/helloworld.proto \
 p4/config/v1/p4info.proto \
 p4/config/v1/p4types.proto \
 google/rpc/status.proto \
@@ -42,6 +46,10 @@ gnmi/gnmi.proto
 proto_cpp_files = \
 cpp_out/p4/v1/p4data.pb.cc \
 cpp_out/p4/v1/p4data.pb.h \
+cpp_out/p4/v1/extra.pb.cc \
+cpp_out/p4/v1/extra.pb.h \
+cpp_out/p4/v1/helloworld.pb.cc \
+cpp_out/p4/v1/helloworld.pb.h \
 cpp_out/p4/v1/p4runtime.pb.cc \
 cpp_out/p4/v1/p4runtime.pb.h \
 cpp_out/p4/config/v1/p4info.pb.cc \
@@ -60,6 +68,10 @@ cpp_out/gnmi/gnmi.pb.h
 proto_grpc_files = \
 grpc_out/p4/v1/p4data.grpc.pb.cc \
 grpc_out/p4/v1/p4data.grpc.pb.h \
+grpc_out/p4/v1/extra.grpc.pb.cc \
+grpc_out/p4/v1/extra.grpc.pb.h \
+grpc_out/p4/v1/helloworld.grpc.pb.cc \
+grpc_out/p4/v1/helloworld.grpc.pb.h \
 grpc_out/p4/v1/p4runtime.grpc.pb.cc \
 grpc_out/p4/v1/p4runtime.grpc.pb.h \
 grpc_out/p4/config/v1/p4info.grpc.pb.cc \
